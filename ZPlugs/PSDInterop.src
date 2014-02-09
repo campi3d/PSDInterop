@@ -1,0 +1,1909 @@
+//To do: Get COrrect Canvas Size
+
+
+[ISubPalette,"Document:PSD Interop"]
+
+// Import/Export Subpalette
+
+[ISubPalette,"Document:PSD Interop:Import Export"]
+
+
+	
+// Import from Photoshop
+
+[IButton,"Document:PSD Interop:Import Export:ImportFromPhotoshop","Sets up the Photoshop Connection",
+[IShowActions,0]
+[IConfig,4.42]
+
+
+[IReset,,4.42]
+
+
+
+[VarDef,UnpolarizedExist,0]
+[VarDef,polarizedExist,0]
+[VarDef,mergedVisible8BitExist,0]
+[VarDef,mergedVisible16BitExist,0]
+[VarDef,fileCheckSum,0]
+
+
+[VarSet,UnpolarizedExist,[FileExists,"C:\temp/unpolarized.psd"]]
+[VarSet,polarizedExist,[FileExists,"C:\temp/polarized.psd"]]
+[VarSet,mergedVisible8BitExist,[FileExists,"C:\temp/mergedVisible8Bit.psd"]]
+[VarSet,mergedVisible16BitExist,[FileExists,"C:\temp/mergedVisible16Bit.psd"]]
+[VarAdd,fileCheckSum, UnpolarizedExist]
+[VarAdd,fileCheckSum, polarizedExist]
+[VarAdd,fileCheckSum, mergedVisible8BitExist]
+[VarAdd,fileCheckSum, mergedVisible16BitExist]
+
+
+
+[If,
+	fileCheckSum<4,
+
+		[Note, "You seem to be missing files in your temp directory. For best results ensure you have the following files in your c tempdir:
+		 unpolarized.psd, polarized.psd, mergedVisible8Bit.psd,mergedVisible16bit.psd"]
+	
+		
+	         
+
+]
+
+
+
+[VarDef,PSDPlaneRes,0]
+[VarSet,PSDPlaneRes,[IGet,Document:PSD Interop:Import Export:PSDRes]]
+[VarDef,CurrentMaxPoly,0]
+[VarSet,CurrentMaxPoly,[IGet,Preferences:Mem:MaxPolyPerMesh]]
+[If,(PSDPlaneRes >= CurrentMaxPoly),
+
+	[Note,"Your MaxPolyCount Setting under Preferences/Mem was too low and had to be adjusted. Please consider saving this setting for the future using Preferences/Config/Store Config"]
+
+	[ISet,Preferences:Mem:MaxPolyPerMesh,PSDPlaneRes+2]
+		]
+
+[IFreeze,
+
+[VarDef,CurrentMaxPolys,0]
+[VarSet,CurrentMaxPoly,[IGet,Preferences:Mem:MaxPolyPerMesh]]
+[IPress,Zscript:Minimal Stroke]
+[IPress,Zscript:Minimal Update]
+[IPress,Tool:PolyMesh3D]
+[IPress,Tool:Plane3D]
+
+
+[Loop,5,
+
+		[If,PSDPlaneRes=0,
+		
+		[ISet,Tool:Initialize:HDivide,33]
+		[ISet,Tool:Initialize:VDivide,33]
+				]	
+
+
+
+
+		[If,PSDPlaneRes=4,
+		
+		[ISet,Tool:Initialize:HDivide,33]
+		[ISet,Tool:Initialize:VDivide,33]
+				]
+
+
+	[If,PSDPlaneRes=8,
+		[ISet,Tool:Initialize:HDivide,12]
+		[ISet,Tool:Initialize:VDivide,12]
+				]
+
+
+
+	[If,PSDPlaneRes=12,
+		[ISet,Tool:Initialize:HDivide,28]
+		[ISet,Tool:Initialize:VDivide,28]
+				]
+
+
+	[If,PSDPlaneRes=16,
+		[ISet,Tool:Initialize:HDivide,9]
+		[ISet,Tool:Initialize:VDivide,9]
+			
+
+				
+			]
+		
+]
+
+
+[CanvasStroke,(ZObjStrokeV02n101=H2E4V197H2E4V19BH2E2V1EBH2E2V1F9H2E2V207H2E2V212H2E2V21CH2E2V224H2E2V22BH2E2V233H2E2V239H2E2V240H2E2V244H2E2V248H2E2V24EH2E2V253H2E2V259H2E2V25EH2E2V264H2E2V26BH2E2V272H2E2V275H2E2V27AH2E2V27DH2E1V280H2E1V283H2E0V286H2E0V289H2E0V28AYH2E4V28AK1XH2E4V28DH2E4V290H2E4V293H2E4V295H2E4V299H2E4V29CH2E4V29EH2E4v2A1FFH2E4V2A4H2E4V2A5H2E4V2A7H2E4V2A8H2E4V2ABH2E4v2ACFFH2E4V2B0H2E4V2B3H2E4V2B5H2E4V2BAH2E4V2BBH2E4V2BCH2E4V2BEH2E4V2C1H2E4V2C2H2E4V2C3H2E4V2C6H2E4V2C7H2E4V2CAH2E4V2CCH2E4V2CEH2E4V2D3H2E4V2D4H2E4V2D9H2E4V2DEH2E4V2E0H2E4V2E2H2E4V2E4H2E4V2E6H2E4V2E7H2E4V2E9H2E4V2EBH2E4V2EEH2E4V2EFH2E4V2EFH2E4V2F0H2E4V2F1H2E4V2F2H2E4V2F3H2E4V2F4H2E4v2F5FFH2E4V2F8H2E4V2F9H2E4V2FAH2E4V2FCH2E4V2FDH2E4V2FEH2E4V2FFH2E4V300H2E4V301H2E4V302H2E4V303H2E4V304H2E4V305H2E4V306H2E4V307H2E4V309H2E4V30AH2E4V30BH2E4V30CH2E4V30DH2E4V30EH2E4V30E)]
+[IPress,Transform: Edit]
+[IPress,Tool]
+[IPress,Tool:Make PolyMesh3D]
+[IUnPress,Tool:Geometry:Smt]
+
+
+[If,PSDPlaneRes=4,
+	[Loop,6,
+		[IPress,Tool:Geometry:Divide]
+	]
+]
+
+[If,PSDPlaneRes=8,
+	[Loop,8,
+		[IPress,Tool:Geometry:Divide]
+	]
+]
+
+[If,PSDPlaneRes=12,
+	[Loop,7,
+		[IPress,Tool:Geometry:Divide]
+	]
+]
+
+[If,PSDPlaneRes=16,
+	[Loop,9,
+		[IPress,Tool:Geometry:Divide]
+	]
+]
+
+[IPress,Tool:Geometry:Smt]
+[IPress,Tool:Texture Map:TextureMap]
+[FileNameSetNext,"C:\temp/unpolarized.psd"]
+[IPress,File:Texture:Import]
+[IClick,6207]//get rid of popup
+[IPress,Material:FastShader]
+[IPress,Tool:Morph Target:StoreMT]
+[VarSet,FileCheckSum,0]
+
+]
+
+,,1,,,] // End IButton
+
+
+
+// Import from Photoshop - Slider
+
+
+
+[ISlider, "Document:PSD Interop:Import Export:PSDRes", 4, 4, 0, 16,"Specifies the Plane Resolution in Million Polygons - 1k=1Mil / 2k=4Mil / 4k=16Mil",,,1]
+
+
+
+//ExportTo Photoshop Button
+
+
+[IButton,"Document:PSD Interop:Import Export:ExportToPhotoshop","Exports your Displacement into your Source PSD File",
+[IShowActions,0]
+[IConfig,4.42]
+
+[VarDef,dispLayer,0] //dispLayer Exists Variable
+[VarDef,UserOutput,0] 
+[VarSet,dispLayer,[IExists,Tool:Layers:dispBase]] //check if dispBase exists
+[VarDef,bumpLayer,0]
+[VarSet,bumpLayer,[IGet,Tool:Displacement Map:Disp On]]
+[VarDef,LayersExist,0]
+[VarSet,LayersExist,[IExists,Tool:Layers:Untitled Layer]]
+[VarDef, CurrentAlpha,""]
+[VarSet, CurrentAlpha,[StrMerge,"Alpha:",[IGetTitle, Alpha:Current Alpha]]]
+[VarDef, CurrentTexture,""]
+[VarSet, CurrentTexture,[StrMerge,"Texture:",[IGetTitle, Texture:Current Texture]]]
+[VarDef, CurrentMaterial,""]
+[VarSet, CurrentMaterial,[StrMerge,"Material:",[IGetTitle, Material:Current Material]]]
+
+
+
+// Export Routine
+
+
+
+[RoutineDef,ExportUserDisp,
+
+[VarDef, OptionsDisp,0]
+[VarDef, OptionsCol,0]
+[VarDef, OptionsGrp,0]
+
+[VarSet, OptionsDisp,[IGet,Document:PSD Interop:Export Options:Disp]]
+[VarSet, OptionsCol,[IGet,Document:PSD Interop:Export Options:Color]]
+[VarSet, OptionsGrp,[IGet,Document:PSD Interop:Export Options:Groups]]
+
+
+
+[If, (OptionsDisp==0) && (OptionsCol==0) && (OptionsGrp==0),
+		[Note, "Nothing is selected for export. Please check your Export Options Subpalette"]
+		[Exit]
+
+]
+
+
+[IFreeze,
+
+
+
+[IPress,Zscript:Minimal Stroke]
+[IPress,Zscript:Minimal Update]
+
+[VarSet,txtrInfo,""]
+[VarSet,txtrWidth,0]
+[VarSet,txtrHeight,0]
+[VarSet,txtrInfo,[IGetInfo,Tool:Texture Map:TextureMap]]//this is the info that appears when the cursor is over the thumbnail
+[VarSet,index,[StrFind,"Width=",txtrInfo]]//StrFind will return -1 if string not found
+[If,index>-1,[VarSet,txtrWidth,[StrExtract,txtrInfo,index+6,index+10]]]
+[VarSet,index,[StrFind,"Height=",txtrInfo]]
+[If,index>-1,[VarSet,txtrHeight,[StrExtract,txtrInfo,index+7,index+11]]]
+[IUnPress,Document:Pro]
+[ISet,Document:Width,txtrWidth]
+[ISet,Document:Height,txtrHeight]
+[IPress,Document:Resize]
+[CanvasZoomSet,.9]
+[CanvasPanSet,641,494]
+[CanvasZoomSet,.81]
+[CanvasPanSet,712,501]
+[CanvasZoomSet,.729]
+[CanvasPanSet,791,509]
+[CanvasZoomSet,.6561]
+[CanvasPanSet,880,520]
+[CanvasZoomSet,.5905]
+[CanvasPanSet,978,531]
+[CanvasZoomSet,.5314]
+[CanvasPanSet,1087,543]
+[CanvasZoomSet,.4783]
+[CanvasPanSet,1208,557]
+[CanvasZoomSet,.4305]
+[CanvasPanSet,1340,573]
+[CanvasZoomSet,.3874]
+[CanvasPanSet,1489,591]
+[CanvasZoomSet,.3487]
+[CanvasPanSet,1655,608]
+[CanvasZoomSet,.3138]
+[CanvasPanSet,1839,629]
+[CanvasZoomSet,.2824]
+[CanvasPanSet,2044,654]
+[CanvasZoomSet,.2542]
+[CanvasPanSet,2272,679]
+[CanvasZoomSet,.2288]
+[CanvasPanSet,2525,707]
+[CanvasZoomSet,.2059]
+[CanvasPanSet,2806,739]
+[CanvasZoomSet,.1853]
+[CanvasPanSet,3119,780]
+[CanvasZoomSet,.1668]
+[CanvasPanSet,3460,818]
+[CanvasZoomSet,.1501]
+[CanvasPanSet,3846,865]
+[CanvasZoomSet,.1351]
+[CanvasPanSet,4275,916]
+[CanvasZoomSet,.1216]
+[CanvasPanSet,4752,969]
+[CanvasZoomSet,.1094]
+[CanvasPanSet,5282,1024]
+[CanvasZoomSet,.0985]
+[CanvasPanSet,5860,1101]
+[CanvasZoomSet,.0886]
+[CanvasPanSet,6514,1179]
+[CanvasZoomSet,.0798]
+[CanvasPanSet,7241,1259]
+[CanvasZoomSet,.0718]
+[CanvasPanSet,8048,1353]
+[CanvasZoomSet,.0646]
+[CanvasPanSet,8945,1462]
+[CanvasZoomSet,.0581]
+[CanvasPanSet,9925,1572]
+[CanvasZoomSet,.0523]
+[CanvasPanSet,11033,1700]
+[CanvasZoomSet,.0471]
+[CanvasPanSet,12264,1827]
+[CanvasZoomSet,.0424]
+[CanvasPanSet,13632,1996]
+[CanvasZoomSet,.0381]
+[CanvasPanSet,15126,2163]
+[IPress,Color:Clear]
+[CanvasStroke,(ZObjStrokeV02n22=
+h1F202v1D7CCh1F202v1F202h1F202v20C38h1F202v2266Eh20C38v240A4h20C38v25ADAh20C38v27510h20C38v28F46h20C38v2A97Ch20C38v2C3B2h20C38v2DDE8h20C38v2F81Eh20C38v31254h20C38v346C0h20C38v346C0h1F202v360F6h1F202v37B2CYh1F202v37B2CK1Xh1F202v37B2Ch1F202v39562h1F202v39562h1F202v39562)]
+[IPress,Transform: Edit]
+[IPress,Draw:Perspective]
+[IUnPress,Draw:Perspective]
+[IPress,Transform:Fit]
+
+
+// When DISP is pressed in Export Options
+
+[If, (OptionsDisp==1),
+
+	[ISet,Alpha:Modify:MidValue,50]
+	[IPress,Alpha:Transfer:GrabDoc]
+	[FileNameSetNext,"C:\temp/psdInterop_Depth.PSD"]
+	[IPress,Alpha:Export]
+
+	
+]
+
+// WHen Color or Groups are exported do the whole Flat Color Fill Thing
+
+[If, (OptionsCol==1) || (OptionsGrp==1),
+
+	[VarSet, CurrentBrush,[StrMerge,"Brush:",[IGetTitle, Brush:Current Brush]]]
+
+	[IPress,Tool:Masking:Clear]
+	[IPress,Tool:Layers:New]
+	[IPress,Tool:Layers:Delete]  // creating a new layer and then deleting it to turn off Record.
+
+
+	[IPress,Brush:Standard]
+
+
+	[VarSet, CurrentRGBIntensity,[IGet,Draw:Rgb Intensity]]
+	[VarSet, CurrentZadd,[IGet,Draw:Zadd]]
+	[VarSet, CurrentZsub,[IGet,Draw:Zsub]]
+	[VarSet, CurrentRGB,[IGet,Draw:Rgb]]
+	[VarSet, CurrentMRGB,[IGet,Draw:Mrgb]]
+	[VarSet, CurrentM,[IGet,Draw:M]]
+
+
+	[IUnPress,Draw:Zsub]
+	[IUnPress,Draw:Zadd]
+	[IPress,Draw:Rgb]	
+	[ISet,Draw:Rgb Intensity,100]
+	[IPress,Draw:M]
+
+
+
+	[IPress,Material:Flat Color]
+	[IPress,Color:FillObject]
+
+]
+
+
+
+// WHen Color is pressed in Export Options
+
+[If, (OptionsCol==1),
+
+	[IPress,Texture:GrabDoc]
+	[FileNameSetNext,"C:\temp/psdInterop_Col.PSD"]
+	[IPress,Texture:Export]
+	[IPress,Texture:Remove]
+
+	]
+
+// WHen Group is presses in Export Options
+
+[If, (OptionsGrp==1),
+	[If, (OptionsCol==0),
+		[IPress,Texture:GrabDoc]
+		[FileNameSetNext,"C:\temp/psdInterop_ColTemp.PSD"]
+		[IPress,Texture:Export]
+		[IPress,Texture:Remove]
+		
+	]
+
+	
+
+	[IPress,Draw:Rgb]
+	[ISet,Draw:Rgb Intensity,100]
+	[IPress,Tool:Polypaint:Polypaint From Polygroups]
+	[IPress,Texture:GrabDoc]
+	[FileNameSetNext,"C:\temp/psdInterop_Grps.PSD"]
+	[IPress,Texture:Export]
+	[IPress,Texture:Remove]
+
+
+	// Bringing Color back on after it was destroyed by Color from Polygroups
+
+	[Loop,2,
+
+	// If no Color is exported but only grps/
+		[If, (OptionsCol==0),
+			[IPress,Tool:Layers:Bake All]
+			[IPress,Tool:Texture Map:TextureMap]
+			[FileNameSetNext,"C:\temp/psdInterop_ColTemp.PSD"]
+			[IPress,File:Texture:Import]
+			[IClick,6207]//get rid of popup
+			[IPress,Draw:Rgb]
+			[ISet,Draw:Rgb Intensity,100]
+			[IPress,Tool:Polypaint:Polypaint From Texture]
+			[IUnPress,Tool:Texture Map:Texture On]
+
+		]
+
+	// If Color is exported with grps/
+		[If, (OptionsCol==1),
+			[IPress,Tool:Layers:Bake All]
+			[IPress,Tool:Texture Map:TextureMap]
+			[FileNameSetNext,"C:\temp/psdInterop_Col.PSD"]
+			[IPress,File:Texture:Import]
+			[IClick,6207]//get rid of popup
+			
+			[IPress,Draw:Rgb]
+			[ISet,Draw:Rgb Intensity,100]
+			[IPress,Tool:Polypaint:Polypaint From Texture]
+			[IUnPress,Tool:Texture Map:Texture On]
+		]
+
+	] //End Loop
+
+]
+
+
+
+[IUnPress,Transform: Edit]
+[IPress,Color:Clear]
+[IPress,Document:WSize]
+[FileNameSetNext,"C:\temp\zbr2psd.zbr"][IPress,Document:Save As]
+[IPress,Document:New Document]
+[CanvasStroke,(ZObjStrokeV02n33=
+H2F1V177H2F1V178H2F1V17EH2F1V187H2F1V18EH2F2V19DH2F2V1ACH2F2V1BDH2F3V1C8H2F3V1D2H2F3V1D9H2F4V1E0H2F4V1E8H2F4V1EDH2F6V1F6H2F6V1FDH2F7V207H2F7V211H2F7V21AH2F7V222H2F8V22BH2F8V236H2F8V23FH2F6V248H2F4V251H2F4V258H2F2V25DH2F0V264H2EFV270H2EEV277H2EDV27DH2ECV27FH2ECV27F)]
+[IPress,Transform: Edit]
+[CanvasStroke,(ZObjStrokeV03n8%p2F21D78p175EE06PNNn-FF25sBAB5ACsBAB5ACsBAB5ACZ=
+H481V185H481V182H480V17EH480V17BH47FV178YH481V178K1XH481V178H481V178)]
+[IPress,1011]
+
+//Resetting all settings for default brush
+
+
+[If, (OptionsCol==1) || (OptionsGrp==1),
+
+
+
+[ISet,Draw:Zadd,CurrentZadd]
+[ISet,Draw:Zsub,CurrentZsub]
+[ISet,Draw:M,CurrentM]
+[ISet,Draw:Rgb,CurrentRGB]
+[ISet,Draw:Mrgb,CurrentMRGB]
+[ISet,Draw:Rgb Intensity,CurrentRGBIntensity]
+
+// getting back to previously selected brush
+
+[IPress,CurrentBrush]
+[IClick,6207]//get rid of popup
+
+
+[IPress,CurrentMaterial]
+[IPress,CurrentTexture]
+
+] // end if
+
+
+
+
+
+[IPress,CurrentAlpha]
+
+
+[IClick,6207]//get rid of popup
+[IClick,6207]//get rid of popup
+[IClick,6207]//get rid of popup
+
+] // End IFreeze ExportDisp
+
+[Note, Done]
+
+	
+] // End Routine
+
+
+[RoutineDef, deleteDispBase,
+
+[IFreeze,	
+		[IModSet,Tool:Layers:dispBase,0]
+		[IPress,Tool:Layers:Delete]
+		[IPress,Tool:Layers:Bake All]
+
+
+] // End IFreeze deletedispBas
+
+
+] //End Routine
+
+
+[RoutineDef, deleteBump,
+[IFreeze,
+		
+		[IUnPress,Tool:Displacement Map:Disp On]
+
+] // End IFreeze deletedBump
+
+
+] // End Routine
+
+
+
+
+
+
+
+
+
+
+
+
+
+[If, (dispLayer=1) || (bumpLayer=1),
+
+	[VarSet,UserOutput,[MessageYesNoCancel, "Your baseDisplacment or bump is still active. Do you wish to delete it first ?", "baseDisp active"]]
+
+] // End If
+
+[If, UserOutput=1,
+
+		
+		[If, (dispLayer=1) && (bumpLayer=1),
+		[RoutineCall, deleteDispBase]
+		[RoutineCall, deleteBump]
+		[RoutineCall,ExportUserDisp]
+		[VarSet, dispLayer,0]
+		[VarSet, bumpLayer,0]
+		]
+
+		[If, (dispLayer=0) && (bumpLayer=1),
+		[RoutineCall, deleteBump]
+		[RoutineCall,ExportUserDisp]
+		[VarSet, bumpLayer,0]
+		[VarSet, dispLayer,0]
+		]
+
+		[If, (dispLayer=1) && (bumpLayer=0),
+		[RoutineCall, deleteDispBase]
+		[RoutineCall,ExportUserDisp]
+		[VarSet, bumpLayer,0]
+		[VarSet, dispLayer,0]
+		]
+
+		
+
+] // End If
+
+
+[If, UserOutput=0,
+	[RoutineCall, ExportUserDisp]
+
+
+] // End If
+
+
+[If, UserOutput=-1,
+
+	[Exit]
+
+] // End If
+
+
+,,1,,,] // End Button
+
+
+// Display Subpalette
+
+[ISubPalette,"Document:PSD Interop:Texture"]
+
+//Polarized Texture Display
+
+
+
+[IButton,"Document:PSD Interop:Texture:pol","Display polarized Texture",
+[IShowActions,0]
+[IConfig,4.42]
+
+[VarDef,polarizedExist,0]
+[VarSet,polarizedExist,[FileExists,"C:\temp/polarized.psd"]]
+
+[If, polarizedExist=0,
+	[Note, "polarized.psd was not found in your temp directory"]
+	[Exit]
+
+]
+
+
+[IFreeze,
+[IPress,Tool:Texture Map:TextureMap]
+[FileNameSetNext,"C:\temp/polarized.psd"]
+[IPress,File:Texture:Import]
+[VarSet,polarizedExist,0]
+[IClick,6207]//get rid of popup
+
+]
+,,0.33,,,] // End IButton // ENd Polarized Button
+
+
+//Unpolarized Texture Display
+
+[IButton,"Document:PSD Interop:Texture:unpol","Display unpolarized Texture",
+[IShowActions,0]
+[IConfig,4.42]
+
+[VarDef,unpolExist,0]
+[VarSet,unpolExist,[FileExists,"C:\temp/unpolarized.psd"]]
+
+[If, unpolExist=0,
+	[Note, "unpolarized.psd was not found in your temp directory"]
+	[Exit]
+
+]
+
+
+[IFreeze,
+[IPress,Tool:Texture Map:TextureMap]
+[FileNameSetNext,"C:\temp/unpolarized.psd"]
+[IPress,File:Texture:Import]
+[IClick,6207]//get rid of popup
+]
+,,0.33,,,] // End Unpolarized Button
+
+
+
+// merged Display Button
+
+[IButton,"Document:PSD Interop:Texture:merged","Display merged Texture",
+[IShowActions,0]
+[IConfig,4.42]
+
+[VarDef,mergedExist,0]
+[VarSet,mergedExist,[FileExists,"C:\temp/mergedVisible8Bit.psd"]]
+
+[If, mergedExist=0,
+	[Note, "mergedVisible8Bit.psd was not found in your temp directory"]
+	[Exit]
+
+]
+
+[IFreeze,
+[IPress,Tool:Texture Map:TextureMap]
+[FileNameSetNext,"C:\temp/mergedVisible8Bit.psd"]
+[IPress,File:Texture:Import]
+[VarSet,mergedExist,0]
+[IClick,6207]//get rid of popup
+]
+,,0.33,,,] // End merged Display Button
+
+
+// OFF Button
+
+
+
+[IButton,"Document:PSD Interop:Texture:Deactivate Texture","Turn off Texture",
+
+[IUnPress,Tool:Texture Map:Texture On]
+[IUnPress,Tool:Polypaint:Colorize]
+
+,,1,,,] // End Off Button
+
+
+
+// Prepare for Texture Paint Button
+
+
+[IButton,"Document:PSD Interop:Texture:Prepare for Paint","Prepares the Plane for Polypainting",
+
+[IFreeze,
+
+// Variables for Popup
+
+[VarDef, CUnpol,0]
+
+[VarDef, Cpol,0]
+
+[VarDef, Cmerge,0]
+
+[VarDef, Cblack,0]
+
+[VarDef, Cwhite,0]
+
+[VarDef, Cgrey,0]
+
+[VarDef,layerPath,"LayerName"]
+
+[VarDef, wid,0]
+
+[VarDef,dispLayer,0]
+[VarSet,dispLayer,[IExists,Tool:Layers:dispBase]]
+[VarDef,LayersExist,0]
+[VarSet,LayersExist,[IExists,Tool:Layers:Untitled Layer]]
+
+
+
+// AppyColorFromTexRoutine
+
+
+[RoutineDef, ApplyColorFromTexRoutine,
+
+
+
+
+
+[VarSet,layerPath,[StrMerge,"Tool:Layers:",[IGetTitle,"Tool:Layers:Layer Intensity"]]]	
+
+[VarSet,wid,[IWidth,layerPath]]	
+
+
+	
+
+
+	[IFreeze,
+
+
+		
+		[IPress,Tool:Layers:New]
+		[IPress,Tool:Layers:Delete]  // creating a new layer and then deleting it to turn off Record.
+
+
+
+
+		[Loop,3,
+
+		
+			[If,(dispLayer==0) && (LayersExist==1), // If only a regular Layer exists -- do not create a new Layer 
+
+	
+					[IPress,Tool:Polypaint:Polypaint From Texture]
+
+
+					[ISet,Tool:Layers:Layers Scrollbar,0,0]
+
+					[If,([IModGet,layerPath]&1) != 1, // if record mode is OFF
+					//set Intensity to 1 for recording
+					//[ISet,Tool:Layers:Layer Intensity,1]	
+					[IClick,layerPath,wid-28,5] // turn on recording by clicking the REC icon
+				
+					]
+	
+
+
+
+
+			]
+
+
+			[If,(dispLayer==0) && (LayersExist==0), // If no regular Layer exists -- do not create a new Layer 
+
+	
+					[IPress,Tool:Polypaint:Polypaint From Texture]
+
+
+				
+				
+			]
+	
+
+
+
+
+			
+
+			[If,(dispLayer==1) && (LayersExist==1),
+	
+		
+
+				[IPress,Tool:Polypaint:Polypaint From Texture]
+
+
+				[ISet,Tool:Layers:Layers Scrollbar,0,0]
+				[If,([IModGet,layerPath]&1) != 1, // if record mode is OFF
+				//set Intensity to 1 for recording
+				//[ISet,Tool:Layers:Layer Intensity,1]	
+				[IClick,layerPath,wid-28,5] // turn on recording by clicking the REC icon
+				
+				]
+	
+		
+
+			]
+
+
+	] //EndLoop
+
+
+
+
+
+
+	[If,(displayer==1) && (LayersExist==0),
+
+	
+				
+					[IPress,Tool:Polypaint:Polypaint From Texture]
+ 					// Only create a new Layer if Displacement has been applied
+
+					[IPress,Tool:Layers:New]
+		
+	
+
+
+			]
+
+
+			// [ISet,Tool:Layers:Layers Scrollbar,0,5] // Reset Scrollbar in Layers Window -- deactivated cause of crashs
+
+
+] // ENd IFreeze
+[Exit]
+
+
+
+
+]// End ApplyColorRoutine
+
+
+
+// Apply Flat Color Routine
+
+
+[RoutineDef, ApplyFlatColorRoutine,
+
+
+
+
+[VarSet,layerPath,[StrMerge,"Tool:Layers:",[IGetTitle,"Tool:Layers:Layer Intensity"]]]	
+
+[VarSet,wid,[IWidth,layerPath]]	
+
+
+
+
+	[IFreeze,
+
+		[IPress,Tool:Layers:New]
+		[IPress,Tool:Layers:Delete] // making sure "rec" is off on layers
+		[IUnpress, Tool:Texture Map:Texture On]
+
+
+
+
+		[Loop,3,  //Flat Color Loop
+
+			[If, (Cblack==1),
+
+				[IColorSet,0,0,0]
+				[IPress, Color:SwitchColor]
+				[IColorSet,0,0,0]
+			]
+
+
+			[If, (CWhite==1),
+
+				[IColorSet,255,255,255]
+				[IPress, Color:SwitchColor]
+				[IColorSet,255,255,255]
+
+			]
+
+			[If, (Cgrey==1),
+
+				[IColorSet, 128,128,128]
+				[IPress, Color:SwitchColor]
+				[IColorSet, 128,128,128]
+
+			]
+
+		] // End Set Flat Color Loop
+
+	
+
+
+	[Loop,3, // checking Layers
+
+	
+
+
+		[If,(dispLayer==0) && (LayersExist==1), // If only a regular Layer exists -- do not create a new Layer 
+
+	
+
+		[IPress, Color:FillObject]
+		[IUnPress,Tool:Texture Map:Texture On]
+
+
+		[ISet,Tool:Layers:Layers Scrollbar,0,0]
+
+			[If,([IModGet,layerPath]&1) != 1, // if record mode is OFF
+			//set Intensity to 1 for recording
+			//[ISet,Tool:Layers:Layer Intensity,1]	
+			[IClick,layerPath,wid-28,5] // turn on recording by clicking the REC icon
+	
+			]
+		[Exit]
+	
+
+
+
+
+		]
+
+
+
+		[If,(dispLayer==0) && (LayersExist==0), // If no regular Layer exists -- do not create a new Layer 
+
+	
+					[IPress, Color:FillObject]
+					[IUnPress,Tool:Texture Map:Texture On]
+					[RoutineCall,ResetVars]
+					[Exit]
+
+				
+				
+		]
+
+
+
+	[If,(dispLayer==1) && (LayersExist==1),
+	
+
+	[IPress, Color:FillObject]
+	[IUnPress,Tool:Texture Map:Texture On]
+	[RoutineCall,ResetVars]
+
+
+	[ISet,Tool:Layers:Layers Scrollbar,0,0]
+	[If,([IModGet,layerPath]&1) != 1, // if record mode is OFF
+	//set Intensity to 1 for recording
+	//[ISet,Tool:Layers:Layer Intensity,1]	
+	[IClick,layerPath,wid-28,5] // turn on recording by clicking the REC icon
+	
+	]
+	
+	[Exit]
+	
+		
+
+	]
+
+
+] //EndLoop
+
+
+
+
+	[If,(displayer==1) && (LayersExist==0),
+
+	
+	
+			[IPress, Color:FillObject]
+ 			// Only create a new Layer if Displacement has been applied
+
+			[IPress,Tool:Layers:New]
+			[RoutineCall,ResetVars]
+			[Exit]
+		
+
+
+	]
+
+
+
+//	[ISet,Tool:Layers:Layers Scrollbar,0,5] // Reset Scrollbar in Layers Window -- deactivated cause of crashs
+
+ 
+
+// Resetting Variables
+
+
+
+[Exit]
+
+] // EndIfreeze
+
+] // End ApplyFlatColorRoutine
+
+
+[RoutineDef,ResetVars,
+
+	
+[VarSet, CUnpol,0]
+
+[VarSet, Cpol,0]
+
+[VarSet, Cmerge,0]
+
+[VarSet, Cblack,0]
+
+[VarSet, Cwhite,0]
+
+[VarSet, Cgrey,0]
+
+] //EndRoutine
+
+
+
+
+// Popup
+
+[RoutineDef, ColorPopup,
+
+	[Loop, 100000, // Loop 'forever'
+
+
+//Create Window
+
+	  [NoteIButton
+               , //label
+               , //icon
+               , //pressed
+               ,1 //disabled
+               ,1 //hoffset
+               ,1 //voffset
+               ,500 // width
+               ,120 //height
+               , //button color
+               , //text color
+               , 0 //button opacity
+               , //text opacity
+               , //icon opacity
+               ]
+
+
+
+//Create Text
+           [NoteIButton, 
+		"Choose a base for your color" // label
+	       , //icon
+               , //pressed
+               ,1 //disabled
+               ,100 //hoffset
+               ,-120 //voffset
+               ,300 // width
+               , //height
+               , //button color
+               , 0x101010//text color
+               , 0 //button opacity
+               , 1//text opacity
+               , 1//icon opacity              
+
+            
+            ]
+
+
+//Create Button "Polarized"
+
+		[NoteIButton
+                , Polarized // text
+   	        ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,80     //hoffset
+                ,30     //voffset
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+
+            ]
+
+//Create Button "UnPolarized"
+
+		[NoteIButton
+                , Unpolarized // text
+   	        ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,200     //hoffset
+                ,30    //voffset	
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+]
+
+//Create Button "Merged"
+
+		[NoteIButton
+                , Merged // text
+   	        ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,320    //hoffset
+                ,30     //voffset
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+
+
+//Create Button "White"
+
+		[NoteIButton
+                , White // text
+                ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,80     //hoffset
+                ,60 //voffset
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+
+
+            ]
+
+
+//Create Button "Black"
+
+		[NoteIButton
+                , Black // text
+                ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,200   //hoffset
+                ,60//voffset
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+//Create Button "Grey"
+
+		[NoteIButton
+                , Grey // text
+                ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,320     //hoffset
+                ,60 //voffset
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+
+
+// Cancel Button
+
+[NoteIButton, "Cancel" 
+                ,       //icon
+                ,      //pressed
+                ,     //disabled
+                ,200     //hoffset
+                ,90//voffset
+                ,100     // width
+                ,     //height
+
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+]
+
+
+
+
+   // Get index of the button that was clicked.
+            [VarSet, userSelect,  [Note,""]]
+
+
+         // --- Space or Return key ---
+            
+            [If, (userSelect==3),    //Polarized
+
+                [VarSet, Cpol, 1]
+	
+		[IFreeze,
+		[IPress,Tool:Texture Map:TextureMap]		
+		[FileNameSetNext,"C:\temp/polarized.psd"]
+		[IPress,File:Texture:Import]
+		[IClick,6207]//get rid of popup
+		] // End IFreeze
+
+
+
+
+
+		[RoutineCall,ApplyColorFromTexRoutine]
+            ]
+
+   	  [If, (userSelect==4),		//Unpolaried 
+                [VarSet, CUnpol, 1]
+
+	        [IFreeze,
+		[IPress,Tool:Texture Map:TextureMap]		
+		[FileNameSetNext,"C:\temp/unpolarized.psd"]
+		[IPress,File:Texture:Import]
+		[IClick,6207]//get rid of popup
+		] // End IFreeze
+
+
+
+		[RoutineCall,ApplyColorFromTexRoutine]
+            ]
+
+  	  [If, (userSelect==5), 
+                [VarSet, Cmerge, 1]	//Merged
+		
+		[IFreeze,
+		[IPress,Tool:Texture Map:TextureMap]		
+		[FileNameSetNext,"C:\temp/mergedVisible8Bit.psd"]
+		[IPress,File:Texture:Import]
+		[IClick,6207]//get rid of popup
+		] // End IFreeze
+
+
+
+
+		[RoutineCall,ApplyColorFromTexRoutine]
+            ]
+
+	  [If, (userSelect==6), 
+                [VarSet, Cwhite, 1][RoutineCall,ApplyFlatColorRoutine]
+
+	 
+            ]
+	
+	  [If, (userSelect==7), 
+                [VarSet, Cblack, 1][RoutineCall,ApplyFlatColorRoutine]
+            ]
+
+	  [If, (userSelect==8), 
+                [VarSet, Cgrey, 1][RoutineCall,ApplyFlatColorRoutine]
+            ]
+
+          // --- 'Cancel' Button ---
+            // IF the user clicked on the 'Exit' button, THEN exit the plugin and resetFileCounter and Variables
+            [If,(userSelect==9), 
+
+				[VarSet,fileCheckSum,0]
+				[VarSet, DUnpol,0]
+				[VarSet, Dpol,0]
+				[VarSet, Dmerge,0]
+				[Exit]]
+
+
+] //EndIFreeze
+] //EndLoop
+] //EndRoutine GUI Popup
+
+
+
+[IShowActions,0]
+[IConfig,4.4]
+
+
+// CHecking if Files Exist
+
+[VarDef,UnpolarizedExist,0]
+[VarDef,polarizedExist,0]
+[VarDef,mergedVisible8BitExist,0]
+[VarDef,mergedVisible16BitExist,0]
+[VarDef,fileCheckSum,0]
+
+[VarSet,UnpolarizedExist,[FileExists,"C:\temp/unpolarized.psd"]]
+[VarSet,polarizedExist,[FileExists,"C:\temp/polarized.psd"]]
+[VarSet,mergedVisible8BitExist,[FileExists,"C:\temp/mergedVisible8Bit.psd"]]
+[VarSet,mergedVisible16BitExist,[FileExists,"C:\temp/mergedVisible16Bit.psd"]]
+[VarAdd,fileCheckSum, UnpolarizedExist]
+[VarAdd,fileCheckSum, polarizedExist]
+[VarAdd,fileCheckSum, mergedVisible8BitExist]
+[VarAdd,fileCheckSum, mergedVisible16BitExist]
+
+
+
+[If,
+	fileCheckSum<4,
+
+		[Note, "You seem to be missing files in your temp directory. Some of the following buttons might not work"]
+	
+		
+	         
+
+]
+
+// End File Exist Check
+
+
+[VarSet,UnpolarizedExist,0]
+[VarSet,polarizedExist,0]
+[VarSet,mergedVisible8BitExist,0]
+[VarSet,mergedVisible16BitExist,0]
+[VarSet,fileCheckSum,0]
+
+
+
+// Checks if Displacement has already been applied and if new Layers Exist
+
+// Variables for dispBase Layer Exist Check
+
+[VarDef,dispLayer,0]
+[VarSet,dispLayer,[IExists,Tool:Layers:dispBase]]
+[VarDef,LayersExist,0]
+[VarSet,LayersExist,[IExists,Tool:Layers:Untitled Layer]]
+
+
+
+[RoutineCall,ColorPopup] // Popup
+
+
+
+
+
+,,1,,,] // End Prepare for Texture Paint Button
+
+
+
+
+// Displacement Preview Subpalette
+
+[ISubPalette,"Document:PSD Interop:Displacement Preview"]
+
+
+
+// Bump Preview Button
+
+
+
+[IFreeze,
+
+// Variables for Popup
+
+[VarDef, BUnpol,0]
+
+[VarDef, Bpol,0]
+
+[VarDef, Bmerge,0]
+
+
+
+// Popup
+
+[RoutineDef, BumpPopup,
+
+	[Loop, 100000, // Loop 'forever'
+
+
+//Create Window
+
+	  [NoteIButton
+               , //label
+               , //icon
+               , //pressed
+               ,1 //disabled
+               ,1 //hoffset
+               ,1 //voffset
+               , // width
+               , //height
+               , //button color
+               , //text color
+               , 0 //button opacity
+               , //text opacity
+               , //icon opacity
+               ]
+
+
+
+//Create Text
+           [NoteIButton, 
+		"Choose Layer for Bump Preview" // label
+	       , //icon
+               , //pressed
+               ,1 //disabled
+               ,1 //hoffset
+               ,-100 //voffset
+               ,400 // width
+               , //height
+               , //button color
+               , 0x101010//text color
+               , 0 //button opacity
+               , 1//text opacity
+               , 1//icon opacity              
+
+            
+            ]
+
+
+//Create Button "Polarized"
+
+		[NoteIButton
+                , Polarized // text
+                ,,,,,,, // unused arguments, ZBrush will use default values
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+//Create Button "UnPolarized"
+
+		[NoteIButton
+                , Unpolarized // text
+                ,,,,,,, // unused arguments, ZBrush will use default values
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+//Create Button "Merged"
+
+		[NoteIButton
+                , Merged // text
+                ,,,,,,, // unused arguments, ZBrush will use default values
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+
+// Cancel Button
+
+[NoteIButton, "Cancel" ,,,,,,,, 0x000000,, 1,1,1]
+
+
+
+
+   // Get index of the button that was clicked.
+            [VarSet, userSelect,  [Note,""]]
+
+
+         // --- Space or Return key ---
+            
+            [If, (userSelect==3), 
+                [VarSet, bpol, 1][RoutineCall,ApplyBump]
+            ]
+
+   	  [If, (userSelect==4), 
+                [VarSet, bUnpol, 1][RoutineCall,ApplyBump]
+            ]
+
+  	  [If, (userSelect==5), 
+                [VarSet, bmerge, 1][RoutineCall,ApplyBump]
+            ]
+
+          // --- 'Cancel' Button ---
+            // IF the user clicked on the 'Exit' button, THEN exit the plugin and resetFileCounter and Variables
+            [If,(userSelect==6), 
+
+				[VarSet,fileCheckSum,0]
+				[VarSet, BUnpol,0]
+				[VarSet, Bpol,0]
+				[VarSet, Bmerge,0]
+				[Exit]]
+
+
+] //EndIFreeze
+] //EndLoop
+] //EndRoutine GUI Popup
+
+[RoutineDef, ApplyBump,
+
+[IFreeze,
+[VarDef,BumpStrength,0]
+[VarSet,BumpStrength,[IGet,Document:PSD Interop:Displacement Preview:BMult]]
+
+
+[VarDef,TextureEnabled,0]
+[VarSet, TextureEnabled,[IGet,Tool:Texture Map:Texture On]]
+
+// Create white Texture if Texture is not enabled]
+
+[If,TextureEnabled=0,
+	[ISet,Tool:UV Map:UV Map Size,256]
+	[IPress,Tool:Texture Map:New Txtr]
+]
+
+
+
+[IPress,Tool:Displacement Map:DisplacementMap]
+
+[If, Bmerge==1,[FileNameSetNext,"C:\temp\mergedVisible16Bit.psd"][IPress,Alpha:Import]]
+[If, BUnpol==1,[FileNameSetNext,"C:\temp\unpolarized.psd"][IPress,Alpha:Import]]
+[If, Bpol==1,[FileNameSetNext,"C:\temp\polarized.psd"][IPress,Alpha:Import]]
+
+[ISet,Tool:Displacement Map:Intensity,0.04*BumpStrength]
+[IPress,Tool:Displacement Map:Mode]
+[IPress,Transform:Quick 3D Edit]
+
+//Resetting Variables
+
+[VarSet,fileCheckSum,0]
+[VarSet, BUnpol,0]
+[VarSet, Bpol,0]
+[VarSet, Bmerge,0]
+
+
+[IClick,6207]//get rid of popup
+[Exit]
+
+] //End IFreeze
+
+
+
+] //EndRoutine Apply Bump
+
+
+
+
+
+
+
+
+[IButton,"Document:PSD Interop:Displacement Preview:Apply Bump","Applies your displacement as bump - needs Texture Display Enabled",
+
+[IShowActions,0]
+[IConfig,4.4]
+
+// CHecking if Files Exist
+
+
+[VarDef,UnpolarizedExist,0]
+[VarDef,polarizedExist,0]
+[VarDef,mergedVisible8BitExist,0]
+[VarDef,mergedVisible16BitExist,0]
+[VarDef,fileCheckSum,0]
+
+
+[VarSet,UnpolarizedExist,[FileExists,"C:\temp/unpolarized.psd"]]
+[VarSet,polarizedExist,[FileExists,"C:\temp/polarized.psd"]]
+[VarSet,mergedVisible8BitExist,[FileExists,"C:\temp/mergedVisible8Bit.psd"]]
+[VarSet,mergedVisible16BitExist,[FileExists,"C:\temp/mergedVisible16Bit.psd"]]
+[VarAdd,fileCheckSum, UnpolarizedExist]
+[VarAdd,fileCheckSum, polarizedExist]
+[VarAdd,fileCheckSum, mergedVisible8BitExist]
+[VarAdd,fileCheckSum, mergedVisible16BitExist]
+
+
+
+[If,
+	fileCheckSum<4,
+
+		[Note, "You seem to be missing files in your temp directory. For best results ensure you have the following files in your c tempdir:
+		 unpolarized.psd, polarized.psd, mergedVisible8Bit.psd,mergedVisible16bit.psd"]
+	
+		
+	         
+
+]
+
+
+// End File Exist Check
+
+
+[VarSet,UnpolarizedExist,0]
+[VarSet,polarizedExist,0]
+[VarSet,mergedVisible8BitExist,0]
+[VarSet,mergedVisible16BitExist,0]
+[VarSet,fileCheckSum,0]
+
+[RoutineCall,BumpPopup] // Popup
+
+
+
+
+,,0.5,,,] // Bump Preview Ibutton End
+
+// ENd BumpPreviewButton
+
+
+
+// Apply Bump- Slider
+
+
+
+[ISlider,"Document:PSD Interop:Displacement Preview:BMult", 1, 1, 1, 25,"Strength Multiplier for your Bump",,,0.5]
+
+
+
+// ENd BumpPreviev Slider
+
+
+
+// Disp Preview Button
+
+[IFreeze,
+
+// Variables for Popup
+
+[VarDef, DUnpol,0]
+
+[VarDef, Dpol,0]
+
+[VarDef, Dmerge,0]
+
+
+
+// Popup
+
+[RoutineDef, DispPopup,
+
+	[Loop, 100000, // Loop 'forever'
+
+
+//Create Window
+
+	  [NoteIButton
+               , //label
+               , //icon
+               , //pressed
+               ,1 //disabled
+               ,1 //hoffset
+               ,1 //voffset
+               , // width
+               , //height
+               , //button color
+               , //text color
+               , 0 //button opacity
+               , //text opacity
+               , //icon opacity
+               ]
+
+
+
+//Create Text
+           [NoteIButton, 
+		"Choose Layer for Disp Preview" // label
+	       , //icon
+               , //pressed
+               ,1 //disabled
+               ,1 //hoffset
+               ,-100 //voffset
+               ,400 // width
+               , //height
+               , //button color
+               , 0x101010//text color
+               , 0 //button opacity
+               , 1//text opacity
+               , 1//icon opacity              
+
+            
+            ]
+
+
+//Create Button "Polarized"
+
+		[NoteIButton
+                , Polarized // text
+                ,,,,,,, // unused arguments, ZBrush will use default values
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+//Create Button "UnPolarized"
+
+		[NoteIButton
+                , Unpolarized // text
+                ,,,,,,, // unused arguments, ZBrush will use default values
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+//Create Button "Merged"
+
+		[NoteIButton
+                , Merged // text
+                ,,,,,,, // unused arguments, ZBrush will use default values
+                , 0x000000 // button color
+                ,
+                ,1,1,1 // opacities
+            ]
+
+
+// Cancel Button
+
+[NoteIButton, "Cancel" ,,,,,,,, 0x000000,, 1,1,1]
+
+
+
+
+   // Get index of the button that was clicked.
+            [VarSet, userSelect,  [Note,""]]
+
+
+         // --- Space or Return key ---
+            
+            [If, (userSelect==3), 
+                [VarSet, Dpol, 1][RoutineCall,ApplyDispRoutine]
+            ]
+
+   	  [If, (userSelect==4), 
+                [VarSet, DUnpol, 1][RoutineCall,ApplyDispRoutine]
+            ]
+
+  	  [If, (userSelect==5), 
+                [VarSet, Dmerge, 1][RoutineCall,ApplyDispRoutine]
+            ]
+
+          // --- 'Cancel' Button ---
+            // IF the user clicked on the 'Exit' button, THEN exit the plugin and resetFileCounter and Variables
+            [If,(userSelect==6), 
+
+				[VarSet,fileCheckSum,0]
+				[VarSet, DUnpol,0]
+				[VarSet, Dpol,0]
+				[VarSet, Dmerge,0]
+				[Exit]]
+
+
+] //EndIFreeze
+] //EndLoop
+] //EndRoutine GUI Popup
+
+
+
+
+// Checks the correct Name the User enters for the DispLayer
+
+[RoutineDef, checkName,
+
+// Variables for dispBase Layer Exist Check
+
+
+[VarSet,dispLayer,[IExists,Tool:Layers:dispBase]]
+
+[If,dispLayer = 0, 
+  [Note,"Incorrect Name ! For the Plugin to work please name your displacement dispBase",,3]
+  [IPress,Tool:Layers:Rename]
+]
+]
+
+
+// Applies the Displacement
+
+[RoutineDef, ApplyDispRoutine,
+
+[IPress,Tool:Layers:New]
+[IPress,Tool:Layers:Rename]
+[RoutineCall, checkName] // Checks the user entered Name
+
+[IFreeze,
+
+
+	[VarDef,DisplacementStrength,0]
+	[VarSet,DisplacementStrength,[IGet,Document:PSD Interop:Displacement Preview:DMult]]
+	[IPress,Tool:Displacement Map:DisplacementMap]
+	[If, Dmerge==1,[FileNameSetNext,"C:\temp\mergedVisible16Bit.psd"][IPress,Alpha:Import]]
+	[If, DUnpol==1,[FileNameSetNext,"C:\temp\unpolarized.psd"][IPress,Alpha:Import]]
+	[If, Dpol==1,[FileNameSetNext,"C:\temp\polarized.psd"][IPress,Alpha:Import]]
+	[ISet,Tool:Displacement Map:Intensity,0.04*DisplacementStrength]
+	[IPress,Tool:Displacement Map:Mode]
+	[IPress,Tool:Displacement Map:Apply DispMap]
+	[IPress,Tool:Layers:New]
+	[IPress,Transform:Quick 3D Edit]
+	[VarSet,fileCheckSum,0]
+	[VarSet, DUnpol,0]
+	[VarSet, Dpol,0]
+	[VarSet, Dmerge,0]
+	[IClick,6207]//get rid of popup
+	[Exit]
+
+
+] //End IFreeze
+] //End Routine
+
+
+
+
+
+[IButton,"Document:PSD Interop:Displacement Preview:Apply Disp","Applies your Displacement. Use the Slider to set a Strength Multiplier",
+[IShowActions,0]
+[IConfig,4.4]
+
+
+// CHecking if Files Exist
+
+[VarDef,UnpolarizedExist,0]
+[VarDef,polarizedExist,0]
+[VarDef,mergedVisible8BitExist,0]
+[VarDef,mergedVisible16BitExist,0]
+[VarDef,fileCheckSum,0]
+
+[VarSet,UnpolarizedExist,[FileExists,"C:\temp/unpolarized.psd"]]
+[VarSet,polarizedExist,[FileExists,"C:\temp/polarized.psd"]]
+[VarSet,mergedVisible8BitExist,[FileExists,"C:\temp/mergedVisible8Bit.psd"]]
+[VarSet,mergedVisible16BitExist,[FileExists,"C:\temp/mergedVisible16Bit.psd"]]
+[VarAdd,fileCheckSum, UnpolarizedExist]
+[VarAdd,fileCheckSum, polarizedExist]
+[VarAdd,fileCheckSum, mergedVisible8BitExist]
+[VarAdd,fileCheckSum, mergedVisible16BitExist]
+
+
+
+[If,
+	fileCheckSum<4,
+
+		[Note, "You seem to be missing files in your temp directory. For best results ensure you have the following files in your c tempdir:
+		 unpolarized.psd, polarized.psd, mergedVisible8Bit.psd,mergedVisible16bit.psd"]
+	
+		
+	         
+
+]
+
+// End File Exist Check
+
+
+[VarSet,UnpolarizedExist,0]
+[VarSet,polarizedExist,0]
+[VarSet,mergedVisible8BitExist,0]
+[VarSet,mergedVisible16BitExist,0]
+[VarSet,fileCheckSum,0]
+
+// Checks if Displacement has already been applied
+
+// Variables for dispBase Layer Exist Check
+
+[VarDef,dispLayer,0]
+[VarSet,dispLayer,[IExists,Tool:Layers:dispBase]]
+
+[If,dispLayer=1,
+	[Note, "You have already applied displacement, please remove,rename or bake displacement layer first",,7]
+	[Exit]
+]
+
+
+[RoutineCall,DispPopup] // Popup
+
+
+
+,,0.5,,,] //End Disp Preview IButton
+
+
+// Apply Disp Multiply SLider
+
+
+
+[ISlider,"Document:PSD Interop:Displacement Preview:DMult", 1, 1, 1, 25,"Strength Multiplier for your Displacement",,,0.5]
+
+
+// ENd Disp Multiply Slider
+
+
+//Start Delete Bump & Disp Button
+
+[IButton,"Document:PSD Interop:Displacement Preview:Delete Bump & Disp","Removes your applied Displacement and Bump",
+[IShowActions,0]
+[IConfig,4.42]
+[VarDef,dispLayer,0]
+[VarSet,dispLayer,[IExists,Tool:Layers:dispBase]]
+[VarDef, bumpOn,0]
+[VarSet,bumpOn,[IGet,Tool:Displacement Map:Disp On]]
+
+
+
+
+[If,(dispLayer=0) && (bumpOn=0),
+	[Note, "You do not have displacement or bump applied",,7]
+	[Exit]
+]
+
+[IFreeze,
+[If, dispLayer=1,
+	[IModSet,Tool:Layers:dispBase,0]
+	[IPress,Tool:Layers:Delete]
+	[IPress,Tool:Layers:Bake All]
+	[VarSet,dispLayer,0]
+]
+
+[If, bumpOn=1,
+	[IUnPress,Tool:Displacement Map:Disp On]
+]
+
+]
+
+,,1,,,] // End Delete Displacement Button
+
+
+
+// Export Options Subpalette
+
+
+[ISubPalette,"Document:PSD Interop:Export Options"]
+
+[ISwitch, "Document:PSD Interop:Export Options:Disp", 1, "When pressed, ExportToPhotoshop will export displacements",,,0,0.333]
+
+[ISwitch, "Document:PSD Interop:Export Options:Color", 0, "When pressed, ExportToPhotoshop will export polypaint",,,0,0.333]
+
+[ISwitch, "Document:PSD Interop:Export Options:Groups", 0, "When pressed, ExportToPhotoshop will export polygroups",,,0,0.333]
+
+[IEnable, Document:PSD Interop:Export Options:Color]
+[IEnable, Document:PSD Interop:Export Options:Groups]
+[IEnable, Document:PSD Interop:Export Options:Disp]
+
+
+
